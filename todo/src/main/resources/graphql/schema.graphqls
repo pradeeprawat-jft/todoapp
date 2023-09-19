@@ -1,0 +1,96 @@
+scalar LocalDateTime
+
+type Query{
+    allUsers: ResponseDtoListOfUsers
+    getUser(userId: String): ResponseDtoOfUsers
+
+    allTodos: ResponseDtoListOfTodos
+    getTodo(todoId:String):ResponseDtoOfTodos
+}
+
+ type Mutation {
+     createUser(userInput: UsersInput): ResponseDtoOfUsers
+     createTodo(todoInput: TodoInputAdvance): ResponseDtoOfTodos
+
+     updateTodo(todoId: ID!, todoInput: TodoInput): ResponseDtoOfTodos
+     deleteTodo(todoId: ID!): ResponseDto
+     login(userEmail:String!,userPassword:String!): ResponseDto
+ }
+
+
+
+type Users {
+    userId : ID!
+    userName : String
+    userEmail: String
+    userPassword  :String
+    todosList : [Todos]
+}
+
+
+type Todos{
+    todoId : ID!
+    title:String
+    description:String
+    createdAt: LocalDateTime
+}
+
+type ResponseDtoListOfUsers {
+    data: [Users]
+    status: Int
+    message: String
+}
+
+type ResponseDtoListOfTodos {
+    data: [Todos]
+    status: Int
+    message: String
+}
+
+type ResponseDtoOfUsers {
+    data: Users
+    status: Int
+    message: String
+}
+
+type ResponseDtoOfTodos {
+    data: Todos
+    status: Int
+    message: String
+}
+
+
+ type ResponseDto {
+     data: String
+     status: Int
+     message: String
+ }
+
+input UsersInput {
+    userName : String
+    userEmail: String
+    userPassword  :String
+    todosList : [TodoInput]
+}
+
+
+ input TodoInput {
+     title: String!
+     description: String
+ }
+
+
+ input UsersInputAdvance {
+     userId:ID!
+     userName : String
+     userEmail: String
+     userPassword  :String
+
+ }
+
+
+ input TodoInputAdvance {
+     title:String
+     description:String
+     user:UsersInputAdvance
+ }
