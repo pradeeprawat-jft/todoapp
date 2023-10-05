@@ -7,7 +7,6 @@ import com.psr.todo.model.Users;
 import com.psr.todo.repository.UsersRepository;
 import com.psr.todo.service.UsersService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
