@@ -3,7 +3,6 @@ package com.psr.todo.service;
 import com.psr.todo.helper.TodoInput;
 import com.psr.todo.helper.TodoInputAdvance;
 import com.psr.todo.model.Todos;
-import com.psr.todo.model.Users;
 
 import java.util.List;
 

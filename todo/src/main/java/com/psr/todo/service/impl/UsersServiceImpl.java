@@ -7,6 +7,8 @@ import com.psr.todo.model.Users;
 import com.psr.todo.repository.UsersRepository;
 import com.psr.todo.service.UsersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,15 +23,21 @@ public class UsersServiceImpl implements UsersService {
 
     private final UsersRepository usersRepository;
 
-
+    private final PasswordEncoder encoder;
     @Override
     public Users createUser(UsersInput input) {
-        System.out.println(input);
         Users user = new Users();
         user.setUserId(createUUID());
         user.setUserName(input.userName());
         user.setUserEmail(input.userEmail());
-        user.setUserPassword(input.userPassword());
+
+        String userPassword = input.userPassword();
+
+        if (userPassword != null) {
+            String encodedPassword = encoder.encode(userPassword);
+            user.setUserPassword(encodedPassword);
+        }
+
         if (input.todosList() != null) {
             List<Todos> todosList = new ArrayList<Todos>();
             for (TodoInput todoInput : input.todosList()) {
@@ -49,6 +57,7 @@ public class UsersServiceImpl implements UsersService {
         return user;
     }
 
+
     @Override
     public List<Users> getUsers() {
         return usersRepository.findAll();
@@ -64,9 +73,13 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public Boolean login(String username, String password) {
+    public Users login(String username, String password) {
         Users user = usersRepository.findByUserEmail(username);
-        return user != null && user.getUserPassword().equals(password);
+        if( user != null && (encoder.matches(password,user.getUserPassword())))
+        {
+            return user;
+        }
+        return new Users();
     }
 
     public String createUUID() {

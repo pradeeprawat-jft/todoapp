@@ -25,16 +25,23 @@ public class Todos {
     private String title;
 
     @Column(name="description")
-        private String description;
+    private String description;
 
     @Column(name="created_at")
     private LocalDateTime createdAt;
+
+    @Column(name="end-time")
+    private LocalDateTime endTime;
+
+    @Column(name="priority")
+    private String priority;
+
+    @Column(name="status")
+    private Boolean status;
 
     @JsonBackReference
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(nullable = false, name = "user_id")
     private Users users;
-
-
 
 }

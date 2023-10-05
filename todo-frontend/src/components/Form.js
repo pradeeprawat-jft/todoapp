@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation, gql } from "@apollo/client";
 
 const CREATE_USER = gql`
@@ -7,7 +7,7 @@ const CREATE_USER = gql`
     $userName: String!
     $userEmail: String!
     $userPassword: String!
-    $todosList: [TodosInput]!
+    $todosList: [TodoInput]!
   ) {
     createUser(
       userInput: {
@@ -19,6 +19,8 @@ const CREATE_USER = gql`
     ) {
       data {
         userId
+        userName
+        userEmail
       }
       status
       message
@@ -29,7 +31,11 @@ const CREATE_USER = gql`
 const LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
     login(userEmail: $email, userPassword: $password) {
-      data
+      data {
+        userId
+        userName
+        userEmail
+      }
       status
       message
     }
@@ -65,9 +71,10 @@ const Form = () => {
 
     try {
       if (signUp) {
-        const { data, loading, error } = await createUser({ variables });
+        const { data, error } = await createUser({ variables });
         console.log("User created:", data.createUser);
         if (data.createUser.status === 200) {
+          localStorage.setItem("userInfo", JSON.stringify(data.createUser.data));
           navigate("/home");
         } else {
           setApperror(error.message);
@@ -79,11 +86,12 @@ const Form = () => {
             password: formData.userPassword,
           },
         });
-        console.log("User logged in:", data.login);
+        console.log("User loggedin :", data.login);
         if (data.login.status === 200) {
+          localStorage.setItem("userInfo", JSON.stringify(data.login.data));
           navigate("/home");
         } else {
-          setApperror(data.login.data);
+          setApperror("User id or password incorrect");
         }
       }
 
@@ -100,6 +108,8 @@ const Form = () => {
       [id]: value,
     });
   };
+
+  
 
   return (
     <div className="my-5">
@@ -163,13 +173,13 @@ const Form = () => {
                       {signUp
                         ? "Already have an account?"
                         : "Don't have an account?"}
-                      <a
+                      <Link
                         href="#"
                         className="text-primary fw-bold"
                         onClick={() => setSignUp(!signUp)}
                       >
                         {signUp ? " Sign In" : " Sign Up"}
-                      </a>
+                      </Link>
                     </p>
                   </div>
                 </div>

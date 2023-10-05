@@ -1,13 +1,16 @@
 import React from "react";
 import Header from "./Header";
 import Todo from "./Todo";
-
+import { useSelector } from "react-redux";
+import Completed from "./Completed";
 const Main = () => {
+  const toggle = useSelector((store) => store.user.showCompletedTodos);
+
   return (
-    <div>
+    <>
       <Header></Header>
-      <Todo></Todo>
-    </div>
+      {!toggle ? <Todo></Todo> : <Completed></Completed>}
+    </>
   );
 };
 

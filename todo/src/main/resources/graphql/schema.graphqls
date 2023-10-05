@@ -14,13 +14,13 @@ type Query{
 
      updateTodo(todoId: ID!, todoInput: TodoInput): ResponseDtoOfTodos
      deleteTodo(todoId: ID!): ResponseDto
-     login(userEmail:String!,userPassword:String!): ResponseDto
+     login(userEmail:String!,userPassword:String!): ResponseDtoOfUsers
  }
 
 
 
 type Users {
-    userId : ID!
+    userId : ID
     userName : String
     userEmail: String
     userPassword  :String
@@ -33,6 +33,9 @@ type Todos{
     title:String
     description:String
     createdAt: LocalDateTime
+    endTime : LocalDateTime
+    priority : String
+    status : Boolean
 }
 
 type ResponseDtoListOfUsers {
@@ -77,6 +80,8 @@ input UsersInput {
  input TodoInput {
      title: String!
      description: String
+     priority : String
+     status:Boolean
  }
 
 
@@ -85,12 +90,12 @@ input UsersInput {
      userName : String
      userEmail: String
      userPassword  :String
-
  }
 
 
  input TodoInputAdvance {
      title:String
      description:String
+     priority : String
      user:UsersInputAdvance
  }

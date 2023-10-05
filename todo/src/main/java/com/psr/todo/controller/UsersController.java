@@ -42,14 +42,14 @@ public class UsersController {
     }
 
     @MutationMapping
-    private ResponseDto<String> login(@Argument String userEmail,@Argument String userPassword){
-        Boolean result =  userService.login(userEmail,userPassword);
-        if(result)
+    private ResponseDto<Users> login(@Argument String userEmail,@Argument String userPassword){
+        Users result =  userService.login(userEmail,userPassword);
+        if(result.getUserId()!=null)
         {
-            return ResponseDto.<String>builder().data("Login Successfully").message(Constants.SUCCESS_MSG).status(HttpStatus.OK.value())
+            return ResponseDto.<Users>builder().data(result).message(Constants.SUCCESS_MSG).status(HttpStatus.OK.value())
                     .build();
         }
-        return ResponseDto.<String>builder().data("Email or Password Wrong").message(Constants.BAD_REQUEST_MSG).status(HttpStatus.FORBIDDEN.value())
+        return ResponseDto.<Users>builder().data(new Users(null,null,null,null,null)).message(Constants.BAD_REQUEST_MSG).status(HttpStatus.FORBIDDEN.value())
                 .build();
     }
 }

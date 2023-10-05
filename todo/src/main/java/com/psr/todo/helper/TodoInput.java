@@ -1,8 +1,9 @@
 package com.psr.todo.helper;
 
-import java.time.LocalDateTime;
+
+import lombok.ToString;
 
 public
-record TodoInput(String title, String description){
+record TodoInput(String title, String description, String priority, Boolean status) {
 
 }

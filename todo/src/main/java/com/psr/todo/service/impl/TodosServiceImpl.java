@@ -26,7 +26,12 @@ public class TodosServiceImpl implements TodosService {
         todo.setTodoId(createUUID());
         todo.setTitle(input.title());
         todo.setDescription(input.description());
+        todo.setPriority(input.priority());
         todo.setCreatedAt(LocalDateTime.now());
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime newDateTime = currentDateTime.plusHours(24);
+        todo.setEndTime(newDateTime);
+        todo.setStatus(false);
         if (input.user() != null) {
             UserInputAdvance userInputAdvance = input.user();
             Users users = new Users();
@@ -56,6 +61,7 @@ public class TodosServiceImpl implements TodosService {
 
     @Override
     public Todos updateTodo(String todoId, TodoInput input) {
+        System.out.println(input.toString());
         Optional<Todos> todoOptional = todosRepository.findById(todoId);
         if (todoOptional.isPresent()) {
             Todos existingTodo = todoOptional.get();
@@ -65,6 +71,10 @@ public class TodosServiceImpl implements TodosService {
             if (input.description() != null) {
                 existingTodo.setDescription(input.description());
             }
+            if(input.priority() != null) {
+                existingTodo.setPriority(input.priority());
+            }
+            existingTodo.setStatus(input.status());
             existingTodo.setCreatedAt(LocalDateTime.now());
             return todosRepository.save(existingTodo);
         } else {
